@@ -83,13 +83,15 @@ namespace tv
 		shaderStages[1].pNext = nullptr;
 		shaderStages[1].pSpecializationInfo = nullptr;
 
-		// some extra input info for the vertex stage (idk why the frag doesn't also have one_
-		VkPipelineVertexInputStateCreateInfo vertexInputInfo;
+		// some extra input info for the vertex stage (idk why the frag doesn't also have one)
+		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 		vertexInputInfo.vertexAttributeDescriptionCount = 0;		// Should change once we arent hardcoding verts
 		vertexInputInfo.vertexBindingDescriptionCount = 0;
 		vertexInputInfo.pVertexAttributeDescriptions = nullptr;
 		vertexInputInfo.pVertexBindingDescriptions = nullptr;
+
+		
 
 		// graphics pipeline create info used to create the graphics pipeline (duh)
 		VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -138,10 +140,16 @@ namespace tv
 		}
 	}
 
-	PipelineConfigInfo TvPipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height)
+	void TvPipeline::Bind(VkCommandBuffer commandBuffer)
+	{
+		// binds a command buffer as a standard graphics pipeline
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+	}
+
+	void TvPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, uint32_t width, uint32_t height)
 	{
 		// here's the big one: the default config which will probably become the permanent config for a while
-		PipelineConfigInfo configInfo{};
+		//PipelineConfigInfo configInfo{};
 
 		// input assembly has to do with how vulkan interprets verticies and assebles triangles from them
 		configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -223,7 +231,5 @@ namespace tv
 		configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
 		configInfo.depthStencilInfo.front = {};		// opt
 		configInfo.depthStencilInfo.back = {};		// opt
-
-		return configInfo;
 	}
 }

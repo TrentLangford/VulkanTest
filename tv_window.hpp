@@ -22,6 +22,10 @@ namespace tv
 
 		// returns true if GLFW thinks the window should close (user dismisses the window)
 		bool shouldClose() { return glfwWindowShouldClose(window); }
+		
+		// Returns the window width and height as a VkExtent2D (2 uint32)
+		VkExtent2D getExtent() { return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) }; };
+
 		// creates a Vulkan window surface
 		void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 	private:

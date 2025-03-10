@@ -10,6 +10,12 @@ namespace tv
 	// Stores all data on the graphics pipeline layout and settings
 	struct PipelineConfigInfo 
 	{
+		// We might need these later to prevent memory badness
+		// Still a little new to the c++ memory managing shenanigans
+		/*PipelineConfigInfo() = default;
+		PipelineConfigInfo(const PipelineConfigInfo&) = delete;
+		PipelineConfigInfo & operator=(const PipelineConfigInfo&) = delete;*/
+
 		VkViewport viewport;
 		VkRect2D scissor;
 		VkPipelineViewportStateCreateInfo viewportInfo;
@@ -33,7 +39,8 @@ namespace tv
 		TvPipeline(const TvPipeline&) = delete;
 		void operator=(const TvPipeline&) = delete;
 
-		static PipelineConfigInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
+		void Bind(VkCommandBuffer commandBuffer);
+		static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, uint32_t width, uint32_t height);
 	private:
 		// reads a file as bytes (for reading compiled shader code)
 		static std::vector<char> readFile(const std::string& filepath);
